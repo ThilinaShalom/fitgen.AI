@@ -6,10 +6,15 @@ const initFirebaseAdmin = () => {
         // Check if running in Node.js environment (API routes)
         if (typeof window === 'undefined') {
             try {
-                const serviceAccount = require('../hdproject-6e51c-firebase-adminsdk-4e5te-d7102a3fe3.json');
+                // Use environment variables for Firebase Admin credentials
+                const serviceAccount = {
+                    projectId: process.env.FIREBASE_ADMIN_PROJECT_ID,
+                    clientEmail: process.env.FIREBASE_ADMIN_CLIENT_EMAIL,
+                    privateKey: process.env.FIREBASE_ADMIN_PRIVATE_KEY?.replace(/\\n/g, '\n'),
+                };
 
                 admin.initializeApp({
-                    credential: admin.credential.cert(serviceAccount),
+                    credential: admin.credential.cert(serviceAccount as admin.ServiceAccount),
                 });
 
                 console.log('Firebase Admin initialized successfully');
